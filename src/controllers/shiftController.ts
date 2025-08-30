@@ -25,7 +25,7 @@ export const getShiftById = async (req: Request, res: Response) => {
     if (!shift) return res.status(404).json({ message: "Shift not found" });
     res.json(shift);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({ message: (error as Error).message });
   }
 };
 
@@ -35,7 +35,7 @@ export const updateShift = async (req: Request, res: Response) => {
     if (!shift) return res.status(404).json({ message: "Shift not found" });
     res.json(shift);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({ message: (error as Error).message });
   }
 };
 
@@ -45,7 +45,7 @@ export const deleteShift = async (req: Request, res: Response) => {
     if (!shift) return res.status(404).json({ message: "Shift not found" });
     res.json({ message: "Shift deleted" });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({ message: (error as Error).message });
   }
 };
 
@@ -58,6 +58,6 @@ export const bookShift = async (req: Request, res: Response) => {
     await shift.save();
     res.json(shift);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({ message: (error as Error).message });
   }
 };

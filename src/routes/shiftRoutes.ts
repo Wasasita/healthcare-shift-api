@@ -22,7 +22,7 @@ router.post(
     body("date").isISO8601(),
     body("payRate").isNumeric()
   ],
-  (req, res, next) => {
+  (req: express.Request, res: express.Response, next: express.NextFunction) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() });
     next();
