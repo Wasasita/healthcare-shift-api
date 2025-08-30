@@ -1,6 +1,6 @@
+import { describe, it, expect } from "vitest";
 import request from "supertest";
 import app from "../app";
-import { describe, it } from "node:test";
 
 describe("Shift API", () => {
   it("should create a new shift", async () => {
@@ -11,13 +11,3 @@ describe("Shift API", () => {
     expect(res.body.facility).toBe("Clinic A");
   });
 });
-function expect(received: any) {
-    return {
-        toBe(expected: any) {
-            if (received !== expected) {
-                throw new Error(`Expected ${received} to be ${expected}`);
-            }
-        }
-    };
-}
-
