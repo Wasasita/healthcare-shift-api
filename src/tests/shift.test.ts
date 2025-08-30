@@ -10,17 +10,19 @@ import app from "../app";
 
 
 let token: string;
+// Use uniqueEmail in your registration and login requests
+const uniqueEmail = `admin_${Date.now()}@example.com`;
 
 beforeAll(async () => {
   // Register a new admin user
   await request(app)
     .post("/api/auth/register")
-    .send({ name: "admin", email: "admin@example.com", password: "pass123", role: "admin" });
+    .send({ name: "admin", email: uniqueEmail, password: "pass123", role: "admin" });
 
   // Login to get JWT
   const loginRes = await request(app)
     .post("/api/auth/login")
-    .send({ email: "admin@example.com", password: "pass123" });
+    .send({ email: uniqueEmail, password: "pass123" });
 
   token = loginRes.body.token;
 });
