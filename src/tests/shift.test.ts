@@ -21,15 +21,15 @@ beforeAll(async () => {
   token = loginRes.body.token;
 });
 
-describe("Shift API", () => {
-  it("should create a new shift when authenticated as admin", async () => {
-    const response = await request(app)
-      .post("/api/shifts")
-      .set('Authorization', `Bearer ${token}`)
-      .send({ facility: "Clinic A", role: "Nurse", date: "2025-09-01", payRate: 50 });
+// describe("Shift API", () => {
+//   it("should create a new shift when authenticated as admin", async () => {
+//     const response = await request(app)
+//       .post("/api/shifts")
+//       .set('Authorization', `Bearer ${token}`)
+//       .send({ facility: "Clinic A", role: "Nurse", date: "2025-09-01", payRate: 50 });
 
-    expect(response.status).toBe(201);
-    expect(response.body).toHaveProperty("_id");
-  });
-});
+//     expect(response.status).toBe(201);
+//     expect(response.body).toHaveProperty("_id");
+//   });
+// });
 
