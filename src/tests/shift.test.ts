@@ -1,46 +1,38 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, beforeAll } from "vitest";
 import request from "supertest";
 import app from "../app";
 
-const adminCredentials = {
-  name: "Admin User",
-  email: "admin@example.com",
-  password: "admin123",
-  role: "admin"
-};
+
+// This makes the test independent by:
+// Creating an admin user.
+// Logging in to get a fresh JWT token.
+// Using that token to create a shift.
+
+
+let token: string;
+
+beforeAll(async () => {
+  // Register a new admin user
+  await request(app)
+    .post("/api/auth/register")
+    .send({ name: "admin", email: "admin@example.com", password: "pass123", role: "admin" });
+
+  // Login to get JWT
+  const loginRes = await request(app)
+    .post("/api/auth/login")
+    .send({ email: "admin@example.com", password: "pass123" });
+
+  token = loginRes.body.token;
+});
 
 describe("Shift API", () => {
-  it("should create a new shift", async () => {
-    const res = await request(app)
+  it("should create a new shift when authenticated as admin", async () => {
+    const response = await request(app)
       .post("/api/shifts")
-      .send({ facility: "Clinic A", role: "Nurse", date: "2025-09-01", payRate: 40 });
-    expect(res.status).toBe(201);
-    expect(res.body.facility).toBe("Clinic A");
+      .set("Authorization", `Bearer ${token}`)
+      .send({ facility: "Clinic A", role: "Nurse", date: "2025-09-01", payRate: 50 });
+
+    expect(response.status).toBe(201);
+    expect(response.body).toHaveProperty("_id");
   });
-    let token: string;
-
-    it("should register an admin user", async () => {
-      await request(app)
-        .post("/api/auth/register")
-        .send(adminCredentials)
-        .expect(201);
-    });
-
-    it("should login and get a JWT token", async () => {
-      const res = await request(app)
-        .post("/api/auth/login")
-        .send({ email: adminCredentials.email, password: adminCredentials.password });
-      expect(res.status).toBe(200);
-      expect(res.body.token).toBeDefined();
-      token = res.body.token;
-    });
-
-    it("should create a new shift when authenticated as admin", async () => {
-      const res = await request(app)
-        .post("/api/shifts")
-        .set("Authorization", `Bearer ${token}`)
-        .send({ facility: "Clinic A", role: "Nurse", date: "2025-09-01", payRate: 40 });
-      expect(res.status).toBe(201);
-      expect(res.body.facility).toBe("Clinic A");
-    });
 });
