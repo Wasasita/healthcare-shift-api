@@ -3,6 +3,7 @@ import request from "supertest";
 import app from "../app";
 
 let token: string;
+
 // Use uniqueEmail in your registration and login requests
 const uniqueEmail = `admin_${Date.now()}@example.com`;
 
